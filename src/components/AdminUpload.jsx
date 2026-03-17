@@ -55,7 +55,7 @@ export default function AdminUpload({ onClose, onOfferAdded }) {
             description_ar: formData.description_ar,
             imageUrls: [selectedImage],
             workingHours: formData.workingHours,
-            expiryDate: formData.expiryDate,
+            expiryDate: new Date(new Date(formData.expiryDate).setHours(23, 59, 59, 999)).toISOString(),
             category: formData.category,
             status: 'Newest',
             googleMapsLink: formData.googleMapsLink,
