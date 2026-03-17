@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Upload, X, CheckCircle, Loader2, FileImage, Image as ImageIcon } from 'lucide-react';
+
 import { useLanguage } from '../context/LanguageContext';
 
 export default function AdminUpload({ onClose, onOfferAdded }) {
@@ -15,7 +16,7 @@ export default function AdminUpload({ onClose, onOfferAdded }) {
     city: '',
     googleMapsLink: '',
     workingHours: '10:00 AM - 10:00 PM',
-    expiryDate: new Date().toISOString().split('T')[0],
+    expiryDate: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString(), // Default to 1 week from now, as string
     category: 'New'
   });
 
@@ -52,9 +53,9 @@ export default function AdminUpload({ onClose, onOfferAdded }) {
             restaurantName_ar: formData.restaurantName_ar,
             description_en: formData.description_en,
             description_ar: formData.description_ar,
-            offerImageUrl: selectedImage,
+            imageUrls: [selectedImage],
             workingHours: formData.workingHours,
-            expiryDate: formData.expiryDate + 'T23:59:59Z',
+            expiryDate: formData.expiryDate,
             category: formData.category,
             status: 'Newest',
             googleMapsLink: formData.googleMapsLink,
@@ -187,7 +188,15 @@ export default function AdminUpload({ onClose, onOfferAdded }) {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   <label style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>Expiry Date / تاريخ الصلاحية</label>
-                  <input required type="date" name="expiryDate" value={formData.expiryDate} onChange={handleInputChange} style={{ padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--color-border)', background: 'var(--color-bg-base)', color: 'white' }} />
+                  <input 
+                    required 
+                    type="date" 
+                    name="expiryDate" 
+                    value={formData.expiryDate.split('T')[0]} 
+                    onChange={(e) => setFormData({ ...formData, expiryDate: new Date(e.target.value).toISOString() })} 
+                    min={new Date().toISOString().split('T')[0]}
+                    style={{ padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--color-border)', background: 'var(--color-bg-base)', color: 'white' }} 
+                  />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   <label style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>Working Hours / أوقات العمل</label>
@@ -197,14 +206,13 @@ export default function AdminUpload({ onClose, onOfferAdded }) {
 
               <button 
                 type="submit"
-                disabled={!selectedImage}
                 style={{ 
                   marginTop: '1rem',
                   width: '100%', 
                   padding: '1rem', 
                   borderRadius: 'var(--border-radius-sm)', 
-                  background: selectedImage ? 'var(--color-primary)' : 'var(--color-bg-surface)', 
-                  color: selectedImage ? 'white' : 'var(--color-text-muted)',
+                  background: 'var(--color-primary)', 
+                  color: 'white',
                   fontWeight: 600,
                   transition: '0.2s'
                 }}

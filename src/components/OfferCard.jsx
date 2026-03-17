@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, MapPin, Clock } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -6,6 +6,19 @@ export default function OfferCard({ offer, onViewDetails }) {
   const { lang, t } = useLanguage();
   const nameField = `restaurantName_${lang}`;
   const descField = `description_${lang}`;
+  
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const images = offer.imageUrls || [offer.offerImageUrl]; // Support both old and new data structures
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+    
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    }, 4000);
+    
+    return () => clearInterval(interval);
+  }, [images.length]);
 
   return (
     <div 
@@ -31,10 +44,28 @@ export default function OfferCard({ offer, onViewDetails }) {
     >
       <div style={{ position: 'relative', height: '200px', width: '100%' }}>
         <img 
-          src={offer.offerImageUrl} 
+          src={images[currentImageIndex]} 
           alt={offer[nameField]} 
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 0.5s ease-in-out' }}
         />
+        
+        {/* Carousel Indicators */}
+        {images.length > 1 && (
+          <div style={{ position: 'absolute', bottom: '10px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '6px' }}>
+            {images.map((_, idx) => (
+              <div 
+                key={idx}
+                style={{
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  background: idx === currentImageIndex ? 'white' : 'rgba(255,255,255,0.4)',
+                  transition: 'background 0.3s ease'
+                }}
+              />
+            ))}
+          </div>
+        )}
         <div 
           className="glass"
           style={{ 

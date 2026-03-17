@@ -3,7 +3,11 @@ export const mockOffers = [
     id: "off-001",
     restaurantName_en: "Burger Haven",
     restaurantName_ar: "ملاذ البرجر",
-    offerImageUrl: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    imageUrls: [
+      "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1550547660-d9450f859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     description_en: "Buy 1 Get 1 Free on all Classic Cheeseburgers. Valid for dine-in only.",
     description_ar: "اشتري 1 واحصل على 1 مجاناً على جميع أنواع تشيز برجر الكلاسيكية. للطلبات الداخلية فقط.",
     city: "Jeddah",
@@ -17,7 +21,11 @@ export const mockOffers = [
     id: "off-002",
     restaurantName_en: "Sushi Sakura",
     restaurantName_ar: "سوشي ساكورا",
-    offerImageUrl: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    imageUrls: [
+      "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1553621042-f6e147245754?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1611143669185-af224c5e3252?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     description_en: "50% off Premium Omakase set. Excludes drinks and desserts.",
     description_ar: "خصم 50% على مجموعة أوماكاسي الفاخرة. لا يشمل المشروبات والحلويات.",
     city: "Jeddah",
@@ -31,7 +39,11 @@ export const mockOffers = [
     id: "off-003",
     restaurantName_en: "Morning Brew",
     restaurantName_ar: "مورنينج برو",
-    offerImageUrl: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    imageUrls: [
+      "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1541167760496-1628856ab772?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1509042239860-f550ce710b93?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     description_en: "Free pastry with any large coffee purchase before 10 AM.",
     description_ar: "معجنات مجانية مع أي شراء قهوة كبيرة قبل 10 صباحاً.",
     city: "Jeddah",
@@ -45,7 +57,11 @@ export const mockOffers = [
     id: "off-004",
     restaurantName_en: "Taco Fiesta",
     restaurantName_ar: "تاكو فييستا",
-    offerImageUrl: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    imageUrls: [
+      "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     description_en: "$2 Tacos all day on Taco Tuesdays. Includes chicken and beef.",
     description_ar: "تاكو بـ 2$ طوال يوم الثلاثاء. يشمل الدجاج واللحم.",
     city: "Jeddah",
@@ -59,7 +75,11 @@ export const mockOffers = [
     id: "off-005",
     restaurantName_en: "Pasta Paradiso",
     restaurantName_ar: "باستا باراديسو",
-    offerImageUrl: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    imageUrls: [
+      "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1551183053-bf91a1d81141?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     description_en: "Complimentary house wine bottle for tables of 4 or more.",
     description_ar: "زجاجة مجانية للطاولات المكونة من 4 أشخاص أو أكثر.",
     city: "Jeddah",
@@ -73,7 +93,11 @@ export const mockOffers = [
     id: "off-006",
     restaurantName_en: "The Vegan Spot",
     restaurantName_ar: "الوجهة النباتية",
-    offerImageUrl: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    imageUrls: [
+      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ],
     description_en: "20% off all salads and smoothie bowls this weekend.",
     description_ar: "خصم 20% على جميع السلطات وأوعية السموذي نهاية هذا الأسبوع.",
     city: "Jeddah",

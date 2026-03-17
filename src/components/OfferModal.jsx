@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, MapPin, Clock, CalendarDays, ExternalLink } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -6,6 +6,19 @@ export default function OfferModal({ offer, onClose }) {
   const { lang, t } = useLanguage();
   const nameField = `restaurantName_${lang}`;
   const descField = `description_${lang}`;
+  
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const images = offer?.imageUrls || (offer?.offerImageUrl ? [offer.offerImageUrl] : []);
+
+  useEffect(() => {
+    if (!images || images.length <= 1) return;
+    
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    }, 4000);
+    
+    return () => clearInterval(interval);
+  }, [images?.length]);
 
   if (!offer) return null;
 
@@ -46,7 +59,7 @@ export default function OfferModal({ offer, onClose }) {
             position: 'absolute',
             top: '1rem',
             right: '1rem',
-            background: 'rgba(0,0,0,0.5)',
+            background: 'var(--color-bg-surface-solid)',
             borderRadius: '50%',
             width: '36px',
             height: '36px',
@@ -54,21 +67,42 @@ export default function OfferModal({ offer, onClose }) {
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 10,
-            border: '1px solid rgba(255,255,255,0.2)',
-            transition: 'background 0.2s'
+            border: '1px solid var(--color-glass-border)',
+            transition: 'background 0.2s',
+            boxShadow: 'var(--shadow-base)'
           }}
-          onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.8)'}
-          onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.5)'}
+          className="hover:bg-opacity-80"
         >
-          <X size={20} color="white" />
+          <X size={20} color="var(--color-text-primary)" />
         </button>
 
-        <div style={{ height: '300px', width: '100%', flexShrink: 0 }}>
-          <img 
-            src={offer.offerImageUrl} 
-            alt={offer[nameField]} 
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
+        <div style={{ height: '300px', width: '100%', flexShrink: 0, position: 'relative' }}>
+          {images.length > 0 && (
+            <img 
+              src={images[currentImageIndex]} 
+              alt={offer[nameField] || 'Offer Image'} 
+              style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 0.5s ease-in-out' }}
+            />
+          )}
+          
+          {/* Carousel Indicators */}
+          {images.length > 1 && (
+            <div style={{ position: 'absolute', bottom: '15px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '8px' }}>
+              {images.map((_, idx) => (
+                <div 
+                  key={idx}
+                  style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    background: idx === currentImageIndex ? 'white' : 'rgba(255,255,255,0.4)',
+                    transition: 'background 0.3s ease',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
+                  }}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         <div style={{ padding: '2rem', overflowY: 'auto' }}>

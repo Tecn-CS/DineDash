@@ -52,15 +52,25 @@ function App() {
     setOffers([newOffer, ...offers]);
   };
 
+  const now = new Date();
+  const unexpiredOffers = offers.filter(offer => {
+    const expiresAt = new Date(offer.expiryDate);
+    return expiresAt >= now;
+  });
+
   const baseFilteredOffers = activeTab === 'All' 
-    ? offers 
-    : offers.filter(offer => offer.status === activeTab);
+    ? unexpiredOffers 
+    : unexpiredOffers.filter(offer => offer.status === activeTab);
 
   const filteredOffers = React.useMemo(() => {
+    // If no user location, just return the filtered offers without sorting by distance
     if (!userLocation) return baseFilteredOffers;
     
+    // If there is user location but no coordinates on the offer, don't break
     return baseFilteredOffers.map(offer => {
-      const distance = calculateDistance(userLocation.lat, userLocation.lng, offer.coordinates?.lat, offer.coordinates?.lng);
+      const distance = offer.coordinates 
+        ? calculateDistance(userLocation.lat, userLocation.lng, offer.coordinates.lat, offer.coordinates.lng)
+        : Infinity;
       return { ...offer, distance };
     }).sort((a, b) => a.distance - b.distance);
   }, [baseFilteredOffers, userLocation]);
