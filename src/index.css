@@ -21,21 +21,21 @@
 
 :root[data-theme="light"], :root {
   /* Light Mode Colors (Appetizing & Clean) */
-  --color-bg-base: #fdfbf8; /* Warm off-white */
-  --color-bg-surface: rgba(255, 255, 255, 0.7);
+  --color-bg-base: #ffffff; /* Pure white for freshness */
+  --color-bg-surface: rgba(255, 255, 255, 0.6);
   --color-bg-surface-solid: #ffffff;
-  --color-bg-surface-hover: rgba(0, 0, 0, 0.04);
-  --color-primary: #ff523b; /* Appetizing Food Orange/Red */
-  --color-primary-hover: #ff7663;
-  --color-text-primary: #1a1a1a;
-  --color-text-secondary: #4a4a4a;
-  --color-text-muted: #888888;
-  --color-border: rgba(0, 0, 0, 0.08);
-  --color-glass-border: rgba(255, 255, 255, 0.4);
-  --color-glass-bg: rgba(255, 255, 255, 0.85);
-  --color-success: #27ae60;
-  --color-warning: #f39c12;
-  --shadow-base: 0 8px 32px rgba(0, 0, 0, 0.05);
+  --color-bg-surface-hover: rgba(0, 0, 0, 0.03);
+  --color-primary: #ff4757; /* Vibrant Coral/Red */
+  --color-primary-hover: #ff6b81;
+  --color-text-primary: #111827; /* Darker gray for better contrast */
+  --color-text-secondary: #4b5563;
+  --color-text-muted: #9ca3af;
+  --color-border: rgba(0, 0, 0, 0.05);
+  --color-glass-border: rgba(255, 255, 255, 0.5);
+  --color-glass-bg: rgba(255, 255, 255, 0.7);
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --shadow-base: 0 10px 40px rgba(0, 0, 0, 0.04);
 }
 
 :root {

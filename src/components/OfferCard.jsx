@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, MapPin, Clock } from 'lucide-react';
+import { Calendar, MapPin, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function OfferCard({ offer, onViewDetails }) {
@@ -45,9 +45,31 @@ export default function OfferCard({ offer, onViewDetails }) {
       <div style={{ position: 'relative', height: '200px', width: '100%' }}>
         <img 
           src={images[currentImageIndex]} 
-          alt={offer[nameField]} 
+          alt={offer[nameField] || 'Offer'} 
           style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 0.5s ease-in-out' }}
         />
+        
+        {/* Navigation Arrows */}
+        {images.length > 1 && (
+          <>
+            <button 
+              onClick={(e) => { e.stopPropagation(); setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length); }}
+              style={{ position: 'absolute', top: '50%', left: '10px', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.3)', borderRadius: '50%', color: 'white', padding: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: '0.2s' }}
+              onMouseEnter={(e) => e.target.style.background = 'rgba(0,0,0,0.5)'}
+              onMouseLeave={(e) => e.target.style.background = 'rgba(0,0,0,0.3)'}
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <button 
+              onClick={(e) => { e.stopPropagation(); setCurrentImageIndex((prev) => (prev + 1) % images.length); }}
+              style={{ position: 'absolute', top: '50%', right: '10px', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.3)', borderRadius: '50%', color: 'white', padding: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: '0.2s' }}
+              onMouseEnter={(e) => e.target.style.background = 'rgba(0,0,0,0.5)'}
+              onMouseLeave={(e) => e.target.style.background = 'rgba(0,0,0,0.3)'}
+            >
+              <ChevronRight size={20} />
+            </button>
+          </>
+        )}
         
         {/* Carousel Indicators */}
         {images.length > 1 && (
@@ -109,16 +131,25 @@ export default function OfferCard({ offer, onViewDetails }) {
         <button 
           style={{ 
             width: '100%', 
-            padding: '0.75rem', 
-            borderRadius: 'var(--border-radius-sm)', 
-            background: 'var(--color-bg-surface)', 
-            border: '1px solid var(--color-glass-border)',
-            fontWeight: 600,
-            transition: '0.2s',
-            marginTop: 'auto'
+            padding: '0.85rem', 
+            borderRadius: '12px', 
+            background: 'var(--color-primary)', 
+            color: 'white',
+            border: 'none',
+            fontWeight: 700,
+            fontSize: '0.95rem',
+            transition: '0.3s',
+            marginTop: 'auto',
+            boxShadow: '0 4px 15px rgba(255, 71, 87, 0.3)'
           }}
-          onMouseEnter={(e) => e.target.style.background = 'var(--color-bg-surface-hover)'}
-          onMouseLeave={(e) => e.target.style.background = 'var(--color-bg-surface)'}
+          onMouseEnter={(e) => {
+            e.target.style.background = 'var(--color-primary-hover)';
+            e.target.style.transform = 'scale(1.02)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.background = 'var(--color-primary)';
+            e.target.style.transform = 'scale(1)';
+          }}
         >
           {t('view_details')}
         </button>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, MapPin, Clock, CalendarDays, ExternalLink } from 'lucide-react';
+import { X, MapPin, Clock, CalendarDays, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function OfferModal({ offer, onClose }) {
@@ -83,6 +83,28 @@ export default function OfferModal({ offer, onClose }) {
               alt={offer[nameField] || 'Offer Image'} 
               style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 0.5s ease-in-out' }}
             />
+          )}
+          
+          {/* Navigation Arrows */}
+          {images.length > 1 && (
+            <>
+              <button 
+                onClick={(e) => { e.stopPropagation(); setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length); }}
+                style={{ position: 'absolute', top: '50%', left: '15px', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.3)', borderRadius: '50%', width: '40px', height: '40px', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: '0.2s', zIndex: 5 }}
+                onMouseEnter={(e) => e.target.style.background = 'rgba(0,0,0,0.5)'}
+                onMouseLeave={(e) => e.target.style.background = 'rgba(0,0,0,0.3)'}
+              >
+                <ChevronLeft size={24} />
+              </button>
+              <button 
+                onClick={(e) => { e.stopPropagation(); setCurrentImageIndex((prev) => (prev + 1) % images.length); }}
+                style={{ position: 'absolute', top: '50%', right: '15px', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.3)', borderRadius: '50%', width: '40px', height: '40px', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: '0.2s', zIndex: 5 }}
+                onMouseEnter={(e) => e.target.style.background = 'rgba(0,0,0,0.5)'}
+                onMouseLeave={(e) => e.target.style.background = 'rgba(0,0,0,0.3)'}
+              >
+                <ChevronRight size={24} />
+              </button>
+            </>
           )}
           
           {/* Carousel Indicators */}

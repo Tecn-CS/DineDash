@@ -6,7 +6,7 @@ import { useLanguage } from '../context/LanguageContext';
 export default function AdminUpload({ onClose, onOfferAdded }) {
   const { t, lang } = useLanguage();
   const [step, setStep] = useState(0); // 0: Form, 1: Processing, 2: Success
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImages, setSelectedImages] = useState([]);
   
   const [formData, setFormData] = useState({
     restaurantName_en: '',
@@ -33,7 +33,7 @@ export default function AdminUpload({ onClose, onOfferAdded }) {
 
   const handleUpload = (e) => {
     e.preventDefault();
-    if (!selectedImage) return;
+    if (selectedImages.length === 0) return;
     
     setStep(1);
     
@@ -53,7 +53,7 @@ export default function AdminUpload({ onClose, onOfferAdded }) {
             restaurantName_ar: formData.restaurantName_ar,
             description_en: formData.description_en,
             description_ar: formData.description_ar,
-            imageUrls: [selectedImage],
+            imageUrls: selectedImages,
             workingHours: formData.workingHours,
             expiryDate: new Date(new Date(formData.expiryDate).setHours(23, 59, 59, 999)).toISOString(),
             category: formData.category,
@@ -76,9 +76,14 @@ export default function AdminUpload({ onClose, onOfferAdded }) {
   };
 
   const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setSelectedImage(URL.createObjectURL(e.target.files[0]));
+    if (e.target.files) {
+      const filesArray = Array.from(e.target.files).map(file => URL.createObjectURL(file));
+      setSelectedImages(prev => [...prev, ...filesArray]);
     }
+  };
+
+  const removeImage = (index) => {
+    setSelectedImages(prev => prev.filter((_, i) => i !== index));
   };
 
   return (
@@ -138,12 +143,28 @@ export default function AdminUpload({ onClose, onOfferAdded }) {
                   transition: '0.2s'
                 }}
               >
-                <input type="file" style={{ display: 'none' }} onChange={handleFileChange} accept="image/*" />
-                {selectedImage ? (
-                  <>
-                    <img src={selectedImage} alt="Preview" style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1rem' }} />
-                    <span style={{ fontWeight: 600 }}>{t('image_selected')}</span>
-                  </>
+                <input type="file" style={{ display: 'none' }} onChange={handleFileChange} accept="image/*" multiple />
+                {selectedImages.length > 0 ? (
+                  <div style={{ width: '100%' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', gap: '0.5rem', marginBottom: '1rem' }}>
+                      {selectedImages.map((img, idx) => (
+                        <div key={idx} style={{ position: 'relative', height: '80px', borderRadius: '8px', overflow: 'hidden' }}>
+                          <img src={img} alt={`Preview ${idx}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          <button 
+                            type="button"
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); removeImage(idx); }}
+                            style={{ position: 'absolute', top: '2px', right: '2px', background: 'rgba(0,0,0,0.5)', borderRadius: '50%', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}
+                          >
+                            <X size={12} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex-center" style={{ gap: '0.5rem', color: 'var(--color-primary)', fontWeight: 600 }}>
+                      <Upload size={16} />
+                      <span>{t('add_more_images') || (lang === 'en' ? 'Add more images' : 'إضافة المزيد من الصور')}</span>
+                    </div>
+                  </div>
                 ) : (
                   <>
                     <ImageIcon size={48} style={{ marginBottom: '1rem', opacity: 0.5 }} />

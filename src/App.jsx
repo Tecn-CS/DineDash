@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LayoutDashboard, Store, Flame, MapPin, Upload, ChevronRight, Sparkles, Globe, Map as MapIcon, Grid } from 'lucide-react';
+import { LayoutDashboard, Store, Flame, MapPin, Upload, ChevronRight, Sparkles, Globe, Map as MapIcon, Grid, Moon, Sun } from 'lucide-react';
 import './App.css';
 
 import { mockOffers } from './data/mockOffers';
@@ -8,6 +8,7 @@ import OfferModal from './components/OfferModal';
 import AdminUpload from './components/AdminUpload';
 import OffersMap from './components/OffersMap';
 import { useLanguage } from './context/LanguageContext';
+import { useTheme } from './context/ThemeContext';
 
 // Haversine formula to calculate distance between two coordinates in kilometers
 function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -25,6 +26,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 
 function App() {
   const { lang, toggleLanguage, t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
   const [offers, setOffers] = useState(mockOffers);
   const [activeTab, setActiveTab] = useState('All');
   const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'map'
@@ -86,18 +88,23 @@ function App() {
             </div>
             <h1 style={{ fontSize: '1.5rem', fontWeight: 600 }}>DineDash</h1>
           </div>
-          <button onClick={toggleLanguage} style={{ padding: '0.5rem', background: 'var(--color-bg-surface)', borderRadius: '8px', color: 'var(--color-text-secondary)', transition: '0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem' }} title="Toggle Language">
-            <Globe size={16} />
-            <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>{lang === 'en' ? 'عربي' : 'EN'}</span>
-          </button>
+          <div className="flex-center" style={{ gap: '0.5rem' }}>
+            <button onClick={toggleTheme} style={{ padding: '0.5rem', background: 'var(--color-bg-surface)', borderRadius: '8px', color: 'var(--color-text-secondary)', transition: '0.2s', display: 'flex', alignItems: 'center' }} title="Toggle Theme">
+              {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+            </button>
+            <button onClick={toggleLanguage} style={{ padding: '0.5rem', background: 'var(--color-bg-surface)', borderRadius: '8px', color: 'var(--color-text-secondary)', transition: '0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem' }} title="Toggle Language">
+              <Globe size={16} />
+              <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>{lang === 'en' ? 'عربي' : 'EN'}</span>
+            </button>
+          </div>
         </div>
         
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {[
-            { id: 'All', icon: <LayoutDashboard size={20} />, label: t('dashboard') },
-            { id: 'Newest', icon: <Sparkles size={20} color={activeTab === 'Newest' ? 'white' : 'var(--color-text-secondary)'} />, label: t('newest') },
-            { id: 'Nearby', icon: <MapPin size={20} color={activeTab === 'Nearby' ? 'white' : 'var(--color-text-secondary)'} />, label: t('nearby_offers') },
-            { id: 'Ending Soon', icon: <Flame size={20} color={activeTab === 'Ending Soon' ? 'var(--color-warning)' : 'var(--color-text-secondary)'} />, label: t('ending_soon') }
+            { id: 'All', icon: <LayoutDashboard size={20} color="#3b82f6" />, label: t('dashboard') },
+            { id: 'Newest', icon: <Sparkles size={20} color="#f59e0b" />, label: t('newest') },
+            { id: 'Nearby', icon: <MapPin size={20} color="#10b981" />, label: t('nearby_offers') },
+            { id: 'Ending Soon', icon: <Flame size={20} color="#ef4444" />, label: t('ending_soon') }
           ].map(item => (
             <button 
               key={item.id}
@@ -108,8 +115,8 @@ function App() {
                 padding: '1rem', 
                 borderRadius: '12px', 
                 background: activeTab === item.id ? 'var(--color-bg-surface-hover)' : 'transparent',
-                color: activeTab === item.id ? 'white' : 'var(--color-text-secondary)',
-                fontWeight: activeTab === item.id ? 600 : 500,
+                color: activeTab === item.id ? 'var(--color-primary)' : 'var(--color-text-secondary)',
+                fontWeight: activeTab === item.id ? 700 : 500,
                 transition: '0.2s',
                 width: '100%'
               }}
