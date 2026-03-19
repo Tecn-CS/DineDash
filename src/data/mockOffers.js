@@ -18,7 +18,7 @@ export const mockOffers = [
     status: "Ending Soon",
     likes: 124,
     dislikes: 5,
-    reports: 0,
+    reports: 5,
     views: 1200
   },
   {
