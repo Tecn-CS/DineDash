@@ -139,7 +139,7 @@ export default function AdminUpload({ onClose, onOfferAdded }) {
                   border: '2px dashed var(--color-border)',
                   borderRadius: 'var(--border-radius-md)',
                   cursor: 'pointer',
-                  background: selectedImage ? 'var(--color-bg-surface-hover)' : 'var(--color-bg-surface)',
+                  background: selectedImages.length > 0 ? 'var(--color-bg-surface-hover)' : 'var(--color-bg-surface)',
                   transition: '0.2s'
                 }}
               >
