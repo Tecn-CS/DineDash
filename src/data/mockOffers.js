@@ -13,7 +13,7 @@ export const mockOffers = [
     city: "Jeddah",
     coordinates: { lat: 21.5433, lng: 39.1728 }, // Jeddah
     workingHours: "10:00 AM - 11:00 PM",
-    expiryDate: "2026-03-20T23:59:59Z",
+    expiryDate: "2026-04-20T23:59:59Z",
     category: "Fast Food",
     status: "Ending Soon",
     likes: 124,
@@ -35,7 +35,7 @@ export const mockOffers = [
     city: "Jeddah",
     coordinates: { lat: 21.5833, lng: 39.1628 }, // Jeddah
     workingHours: "12:00 PM - 10:00 PM",
-    expiryDate: "2026-03-25T23:59:59Z",
+    expiryDate: "2026-04-25T23:59:59Z",
     category: "Fine Dining",
     status: "Newest",
     likes: 85,
@@ -57,7 +57,7 @@ export const mockOffers = [
     city: "Jeddah",
     coordinates: { lat: 21.4933, lng: 39.1828 }, // Jeddah
     workingHours: "6:30 AM - 4:00 PM",
-    expiryDate: "2026-03-18T23:59:59Z",
+    expiryDate: "2026-04-18T23:59:59Z",
     category: "Breakfast",
     status: "Nearby",
     likes: 42,
@@ -79,7 +79,7 @@ export const mockOffers = [
     city: "Jeddah",
     coordinates: { lat: 21.5733, lng: 39.1328 }, // Jeddah
     workingHours: "11:00 AM - 10:00 PM",
-    expiryDate: "2026-03-24T23:59:59Z",
+    expiryDate: "2026-04-24T23:59:59Z",
     category: "Fast Food",
     status: "Newest",
     likes: 210,
@@ -101,7 +101,7 @@ export const mockOffers = [
     city: "Jeddah",
     coordinates: { lat: 21.5633, lng: 39.1558 }, // Jeddah
     workingHours: "5:00 PM - 11:30 PM",
-    expiryDate: "2026-03-17T23:59:59Z",
+    expiryDate: "2026-04-17T23:59:59Z",
     category: "Fine Dining",
     status: "Ending Soon",
     likes: 56,
