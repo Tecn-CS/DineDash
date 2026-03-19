@@ -7,6 +7,7 @@ import OfferCard from './components/OfferCard';
 import OfferModal from './components/OfferModal';
 import AdminUpload from './components/AdminUpload';
 import OffersMap from './components/OffersMap';
+import ThemeSwitch from './components/ThemeSwitch';
 import { useLanguage } from './context/LanguageContext';
 import { useTheme } from './context/ThemeContext';
 
@@ -88,15 +89,10 @@ function App() {
             </div>
             <h1 style={{ fontSize: '1.5rem', fontWeight: 600 }}>DineDash</h1>
           </div>
-          <div className="flex-center" style={{ gap: '0.5rem' }}>
-            <button onClick={toggleTheme} style={{ padding: '0.5rem', background: 'var(--color-bg-surface)', borderRadius: '8px', color: 'var(--color-text-secondary)', transition: '0.2s', display: 'flex', alignItems: 'center' }} title="Toggle Theme">
-              {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
-            </button>
-            <button onClick={toggleLanguage} style={{ padding: '0.5rem', background: 'var(--color-bg-surface)', borderRadius: '8px', color: 'var(--color-text-secondary)', transition: '0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem' }} title="Toggle Language">
-              <Globe size={16} />
-              <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>{lang === 'en' ? 'عربي' : 'EN'}</span>
-            </button>
-          </div>
+          <button onClick={toggleLanguage} style={{ padding: '0.5rem', background: 'var(--color-bg-surface)', borderRadius: '8px', color: 'var(--color-text-secondary)', transition: '0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem' }} title="Toggle Language">
+            <Globe size={16} />
+            <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>{lang === 'en' ? 'عربي' : 'EN'}</span>
+          </button>
         </div>
         
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -130,7 +126,11 @@ function App() {
           ))}
         </nav>
         
-        <div style={{ marginTop: 'auto' }}>
+        <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div className="flex-center" style={{ justifyContent: 'space-between', padding: '0.5rem 0' }}>
+            <span style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', fontWeight: 500 }}>{theme === 'light' ? 'Light Mode' : 'Dark Mode'}</span>
+            <ThemeSwitch />
+          </div>
           <button 
             onClick={() => setIsUploadOpen(true)}
             className="flex-center glass" 

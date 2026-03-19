@@ -34,7 +34,18 @@ const translations = {
     restaurant_name: 'Restaurant Name',
     description: 'Description',
     expiry_date: 'Expiry Date',
-    location: 'Location (Lat, Lng)'
+    location: 'Location (Lat, Lng)',
+    // Engagement
+    likes: 'Likes',
+    report: 'Report False Offer',
+    report_desc: 'Is this offer incorrect or fake?',
+    report_success: 'Thank you for reporting. Our team will verify it.',
+    report_warning: 'Reported multiple times! Please verify with the branch before going.',
+    share: 'Share',
+    share_with_friend: 'Share with a friend',
+    share_social: 'Share on Social Media',
+    copy_link: 'Copy Link',
+    link_copied: 'Link copied to clipboard!'
   },
   ar: {
     dashboard: 'لوحة التحكم',
@@ -67,7 +78,18 @@ const translations = {
     restaurant_name: 'اسم المطعم',
     description: 'الوصف',
     expiry_date: 'تاريخ الانتهاء',
-    location: 'الموقع (خط العرض، خط الطول)'
+    location: 'الموقع (خط العرض، خط الطول)',
+    // Engagement
+    likes: 'إعجابات',
+    report: 'إبلاغ عن عرض غير صحيح',
+    report_desc: 'هل هذا العرض غير صحيح أو وهمي؟',
+    report_success: 'شكرًا لك على الإبلاغ. سيقوم فريقنا بالتحقق من ذلك.',
+    report_warning: 'تم الإبلاغ أكثر من مرة بعدم صحة العرض! الرجاء التأكد من الفرع قبل الذهاب.',
+    share: 'مشاركة',
+    share_with_friend: 'شارك مع صديق',
+    share_social: 'مشاركة في وسائل التواصل',
+    copy_link: 'نسخ الرابط',
+    link_copied: 'تم نسخ الرابط إلى الحافظة!'
   }
 };
 

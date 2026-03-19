@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, MapPin, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar, MapPin, Clock, ChevronLeft, ChevronRight, ThumbsUp, ThumbsDown, Share2, Info } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function OfferCard({ offer, onViewDetails }) {
@@ -8,6 +8,10 @@ export default function OfferCard({ offer, onViewDetails }) {
   const descField = `description_${lang}`;
   
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [likes, setLikes] = useState(offer.likes || 0);
+  const [hasLiked, setHasLiked] = useState(false);
+  const [hasDisliked, setHasDisliked] = useState(false);
+  
   const images = offer.imageUrls || [offer.offerImageUrl]; // Support both old and new data structures
 
   useEffect(() => {
@@ -19,6 +23,38 @@ export default function OfferCard({ offer, onViewDetails }) {
     
     return () => clearInterval(interval);
   }, [images.length]);
+
+  const handleLike = (e) => {
+    e.stopPropagation();
+    if (hasLiked) {
+      setLikes(prev => prev - 1);
+      setHasLiked(false);
+    } else {
+      setLikes(prev => prev + 1);
+      setHasLiked(true);
+      if (hasDisliked) setHasDisliked(false);
+    }
+  };
+
+  const handleDislike = (e) => {
+    e.stopPropagation();
+    if (hasDisliked) {
+      setHasDisliked(false);
+    } else {
+      setHasDisliked(true);
+      if (hasLiked) {
+        setLikes(prev => prev - 1);
+        setHasLiked(false);
+      }
+    }
+  };
+
+  const handleShare = (e) => {
+    e.stopPropagation();
+    const url = window.location.href; // Mock URL
+    navigator.clipboard.writeText(url);
+    alert(t('link_copied'));
+  };
 
   return (
     <div 
@@ -126,6 +162,41 @@ export default function OfferCard({ offer, onViewDetails }) {
             <Clock size={14} />
             <span>{offer.workingHours}</span>
           </div>
+        </div>
+
+        {offer.reports > 3 && (
+          <div className="flex-center" style={{ gap: '0.5rem', padding: '0.6rem', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '8px', marginBottom: '1rem', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+            <Info size={14} color="#ef4444" />
+            <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: 600 }}>{t('report_warning')}</span>
+          </div>
+        )}
+        
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', gap: '1rem' }}>
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <button 
+              onClick={handleLike}
+              className="flex-center"
+              style={{ padding: '0.5rem 0.8rem', borderRadius: '8px', background: hasLiked ? 'rgba(255, 71, 87, 0.1)' : 'var(--color-bg-surface)', border: '1px solid var(--color-glass-border)', gap: '0.4rem', transition: '0.2s', color: hasLiked ? 'var(--color-primary)' : 'var(--color-text-secondary)' }}
+            >
+              <ThumbsUp size={16} fill={hasLiked ? 'currentColor' : 'none'} />
+              <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>{likes}</span>
+            </button>
+            <button 
+              onClick={handleDislike}
+              className="flex-center"
+              style={{ padding: '0.5rem 0.8rem', borderRadius: '8px', background: hasDisliked ? 'rgba(0, 0, 0, 0.1)' : 'var(--color-bg-surface)', border: '1px solid var(--color-glass-border)', transition: '0.2s', color: hasDisliked ? 'var(--color-text-primary)' : 'var(--color-text-secondary)' }}
+            >
+              <ThumbsDown size={16} fill={hasDisliked ? 'currentColor' : 'none'} />
+            </button>
+          </div>
+          <button 
+            onClick={handleShare}
+            className="flex-center"
+            style={{ padding: '0.5rem', borderRadius: '8px', background: 'var(--color-bg-surface)', border: '1px solid var(--color-glass-border)', color: 'var(--color-text-secondary)', transition: '0.2s' }}
+            title={t('share')}
+          >
+            <Share2 size={18} />
+          </button>
         </div>
         
         <button 

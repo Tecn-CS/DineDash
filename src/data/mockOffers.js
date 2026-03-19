@@ -15,7 +15,11 @@ export const mockOffers = [
     workingHours: "10:00 AM - 11:00 PM",
     expiryDate: "2026-03-20T23:59:59Z",
     category: "Fast Food",
-    status: "Ending Soon"
+    status: "Ending Soon",
+    likes: 124,
+    dislikes: 5,
+    reports: 0,
+    views: 1200
   },
   {
     id: "off-002",
@@ -33,7 +37,11 @@ export const mockOffers = [
     workingHours: "12:00 PM - 10:00 PM",
     expiryDate: "2026-03-25T23:59:59Z",
     category: "Fine Dining",
-    status: "Newest"
+    status: "Newest",
+    likes: 85,
+    dislikes: 2,
+    reports: 0,
+    views: 450
   },
   {
     id: "off-003",
@@ -51,7 +59,11 @@ export const mockOffers = [
     workingHours: "6:30 AM - 4:00 PM",
     expiryDate: "2026-03-18T23:59:59Z",
     category: "Breakfast",
-    status: "Nearby"
+    status: "Nearby",
+    likes: 42,
+    dislikes: 1,
+    reports: 4, // This one will trigger the warning
+    views: 150
   },
   {
     id: "off-004",
@@ -69,7 +81,11 @@ export const mockOffers = [
     workingHours: "11:00 AM - 10:00 PM",
     expiryDate: "2026-03-24T23:59:59Z",
     category: "Fast Food",
-    status: "Newest"
+    status: "Newest",
+    likes: 210,
+    dislikes: 8,
+    reports: 1,
+    views: 890
   },
   {
     id: "off-005",
@@ -87,7 +103,11 @@ export const mockOffers = [
     workingHours: "5:00 PM - 11:30 PM",
     expiryDate: "2026-03-17T23:59:59Z",
     category: "Fine Dining",
-    status: "Ending Soon"
+    status: "Ending Soon",
+    likes: 56,
+    dislikes: 12,
+    reports: 0,
+    views: 320
   },
   {
     id: "off-006",
@@ -105,6 +125,10 @@ export const mockOffers = [
     workingHours: "8:00 AM - 8:00 PM",
     expiryDate: "2026-03-30T23:59:59Z",
     category: "Breakfast",
-    status: "Nearby"
+    status: "Nearby",
+    likes: 38,
+    dislikes: 0,
+    reports: 2,
+    views: 280
   }
 ];

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, MapPin, Clock, CalendarDays, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, MapPin, Clock, CalendarDays, ExternalLink, ChevronLeft, ChevronRight, ThumbsUp, ThumbsDown, Share2, AlertTriangle, Send, Copy, Check, Info } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function OfferModal({ offer, onClose }) {
@@ -8,6 +8,13 @@ export default function OfferModal({ offer, onClose }) {
   const descField = `description_${lang}`;
   
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [likes, setLikes] = useState(offer?.likes || 0);
+  const [hasLiked, setHasLiked] = useState(false);
+  const [hasDisliked, setHasDisliked] = useState(false);
+  const [isReporting, setIsReporting] = useState(false);
+  const [reportSubmitted, setReportSubmitted] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
+  
   const images = offer?.imageUrls || (offer?.offerImageUrl ? [offer.offerImageUrl] : []);
 
   useEffect(() => {
@@ -19,6 +26,58 @@ export default function OfferModal({ offer, onClose }) {
     
     return () => clearInterval(interval);
   }, [images?.length]);
+
+  const handleLike = () => {
+    if (hasLiked) {
+      setLikes(prev => prev - 1);
+      setHasLiked(false);
+    } else {
+      setLikes(prev => prev + 1);
+      setHasLiked(true);
+      if (hasDisliked) setHasDisliked(false);
+    }
+  };
+
+  const handleDislike = () => {
+    if (hasDisliked) {
+      setHasDisliked(false);
+    } else {
+      setHasDisliked(true);
+      if (hasLiked) {
+        setLikes(prev => prev - 1);
+        setHasLiked(false);
+      }
+    }
+  };
+
+  const handleReport = () => {
+    setIsReporting(true);
+  };
+
+  const submitReport = () => {
+    setReportSubmitted(true);
+    setTimeout(() => {
+      setIsReporting(false);
+      setReportSubmitted(false);
+    }, 3000);
+  };
+
+  const copyLink = () => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url);
+    setLinkCopied(true);
+    setTimeout(() => setLinkCopied(false), 2000);
+  };
+
+  const shareWhatsApp = () => {
+    const text = `${t('share_with_friend')}: ${offer[nameField]} - ${window.location.href}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+  };
+
+  const shareX = () => {
+    const text = `${offer[nameField]} - ${t('discover_offers')}`;
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`, '_blank');
+  };
 
   if (!offer) return null;
 
@@ -171,6 +230,100 @@ export default function OfferModal({ offer, onClose }) {
               </div>
             )}
           </div>
+
+          {offer.reports > 3 && (
+            <div className="flex-center" style={{ gap: '1rem', padding: '1rem', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '12px', marginBottom: '2rem', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+              <Info size={24} color="#ef4444" />
+              <p style={{ fontSize: '0.9rem', color: '#ef4444', fontWeight: 600 }}>{t('report_warning')}</p>
+            </div>
+          )}
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+              <div style={{ display: 'flex', gap: '0.75rem' }}>
+                <button 
+                  onClick={handleLike}
+                  className="flex-center"
+                  style={{ padding: '0.75rem 1.25rem', borderRadius: '12px', background: hasLiked ? 'rgba(255, 71, 87, 0.1)' : 'var(--color-bg-surface)', border: '1px solid var(--color-glass-border)', gap: '0.5rem', transition: '0.2s', color: hasLiked ? 'var(--color-primary)' : 'var(--color-text-secondary)' }}
+                >
+                  <ThumbsUp size={20} fill={hasLiked ? 'currentColor' : 'none'} />
+                  <span style={{ fontWeight: 700 }}>{likes}</span>
+                </button>
+                <button 
+                  onClick={handleDislike}
+                  className="flex-center"
+                  style={{ padding: '0.75rem 1.25rem', borderRadius: '12px', background: hasDisliked ? 'rgba(0, 0, 0, 0.1)' : 'var(--color-bg-surface)', border: '1px solid var(--color-glass-border)', transition: '0.2s', color: hasDisliked ? 'var(--color-text-primary)' : 'var(--color-text-secondary)' }}
+                >
+                  <ThumbsDown size={20} fill={hasDisliked ? 'currentColor' : 'none'} />
+                </button>
+              </div>
+
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button 
+                  onClick={shareWhatsApp}
+                  className="flex-center"
+                  style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#25D366', color: 'white', border: 'none', transition: '0.2s' }}
+                  title="WhatsApp"
+                >
+                  <Send size={20} />
+                </button>
+                <button 
+                  onClick={shareX}
+                  className="flex-center"
+                  style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#000', color: 'white', border: 'none', transition: '0.2s' }}
+                  title="X (Twitter)"
+                >
+                  <Share2 size={20} />
+                </button>
+                <button 
+                  onClick={copyLink}
+                  className="flex-center"
+                  style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'var(--color-bg-surface)', color: 'var(--color-text-primary)', border: '1px solid var(--color-glass-border)', transition: '0.2s' }}
+                  title={t('copy_link')}
+                >
+                  {linkCopied ? <Check size={20} color="var(--color-success)" /> : <Copy size={20} />}
+                </button>
+              </div>
+            </div>
+
+            <button 
+              onClick={handleReport}
+              className="flex-center"
+              style={{ padding: '0.75rem', borderRadius: '12px', background: 'transparent', border: '1px solid var(--color-glass-border)', color: 'var(--color-text-muted)', gap: '0.5rem', fontSize: '0.9rem', transition: '0.2s' }}
+            >
+              <AlertTriangle size={18} />
+              {t('report')}
+            </button>
+          </div>
+
+          {isReporting && (
+            <div className="glass" style={{ padding: '1.5rem', borderRadius: '12px', marginBottom: '2rem', animation: 'fadeIn 0.3s ease-out' }}>
+              {!reportSubmitted ? (
+                <>
+                  <h4 style={{ marginBottom: '0.5rem', fontWeight: 600 }}>{t('report_desc')}</h4>
+                  <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                    <button 
+                      onClick={submitReport}
+                      style={{ padding: '0.5rem 1rem', borderRadius: '8px', background: 'var(--color-primary)', color: 'white', border: 'none', fontWeight: 600 }}
+                    >
+                      {t('report')}
+                    </button>
+                    <button 
+                      onClick={() => setIsReporting(false)}
+                      style={{ padding: '0.5rem 1rem', borderRadius: '8px', background: 'var(--color-bg-surface)', border: '1px solid var(--color-glass-border)', color: 'var(--color-text-primary)' }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div className="flex-center" style={{ gap: '0.5rem', color: 'var(--color-success)' }}>
+                  <Check size={20} />
+                  <p style={{ fontWeight: 600 }}>{t('report_success')}</p>
+                </div>
+              )}
+            </div>
+          )}
 
           <a 
             href={offer.googleMapsLink || (offer.coordinates ? `https://www.google.com/maps/search/?api=1&query=${offer.coordinates.lat},${offer.coordinates.lng}` : '#')}
