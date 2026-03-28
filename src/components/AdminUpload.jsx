@@ -17,7 +17,9 @@ export default function AdminUpload({ onClose, onOfferAdded }) {
     googleMapsLink: '',
     workingHours: '10:00 AM - 10:00 PM',
     expiryDate: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString(), // Default to 1 week from now, as string
-    category: 'New'
+    category: 'Fast Food',
+    recurringDays: [],
+    recurringEndDate: ''
   });
 
   const workflowSteps = [
@@ -57,6 +59,8 @@ export default function AdminUpload({ onClose, onOfferAdded }) {
             workingHours: formData.workingHours,
             expiryDate: new Date(new Date(formData.expiryDate).setHours(23, 59, 59, 999)).toISOString(),
             category: formData.category,
+            recurringDays: formData.recurringDays.length > 0 ? formData.recurringDays : undefined,
+            recurringEndDate: formData.recurringEndDate ? new Date(new Date(formData.recurringEndDate).setHours(23, 59, 59, 999)).toISOString() : null,
             status: 'Newest',
             googleMapsLink: formData.googleMapsLink,
             city: formData.city,
@@ -184,15 +188,12 @@ export default function AdminUpload({ onClose, onOfferAdded }) {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  <label style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>Description (EN)</label>
-                  <textarea required name="description_en" value={formData.description_en} onChange={handleInputChange} rows={2} style={{ padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--color-border)', background: 'var(--color-bg-base)', color: 'white', fontFamily: 'inherit' }} />
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  <label style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>الوصف (AR)</label>
-                  <textarea required name="description_ar" value={formData.description_ar} onChange={handleInputChange} rows={2} style={{ padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--color-border)', background: 'var(--color-bg-base)', color: 'white', fontFamily: 'inherit', direction: 'rtl' }} />
-                </div>
+              <div style={{ gridColumn: 'span 2', display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                  <label style={{ fontSize: '1rem', color: 'var(--color-text-primary)', fontWeight: 600, background: 'rgba(255, 255, 255, 0.05)', padding: '0.2rem 0.5rem', borderRadius: '4px', width: 'fit-content' }}>{lang === 'en' ? 'Description' : 'الوصف'}</label>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <textarea required name="description_en" placeholder="English description..." value={formData.description_en} onChange={handleInputChange} rows={2} style={{ padding: '0.85rem', borderRadius: '10px', border: '1px solid var(--color-border)', background: 'var(--color-bg-base)', color: 'white', fontFamily: 'inherit', fontSize: '1rem' }} />
+                    <textarea required name="description_ar" placeholder="الوصف بالعربي..." value={formData.description_ar} onChange={handleInputChange} rows={2} style={{ padding: '0.85rem', borderRadius: '10px', border: '1px solid var(--color-border)', background: 'var(--color-bg-base)', color: 'white', fontFamily: 'inherit', direction: 'rtl', fontSize: '1rem' }} />
+                  </div>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
@@ -210,7 +211,7 @@ export default function AdminUpload({ onClose, onOfferAdded }) {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   <label style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>Expiry Date / تاريخ الصلاحية</label>
                   <input 
-                    required 
+                    required={formData.recurringDays.length === 0}
                     type="date" 
                     name="expiryDate" 
                     value={formData.expiryDate.split('T')[0]} 
@@ -223,6 +224,97 @@ export default function AdminUpload({ onClose, onOfferAdded }) {
                   <label style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>Working Hours / أوقات العمل</label>
                   <input required type="text" name="workingHours" placeholder="e.g. 10:00 AM - 10:00 PM" value={formData.workingHours} onChange={handleInputChange} style={{ padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--color-border)', background: 'var(--color-bg-base)', color: 'white', direction: 'ltr' }} />
                 </div>
+              </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  <label style={{ fontSize: '1rem', color: 'var(--color-text-primary)', fontWeight: 600, background: 'rgba(255, 255, 255, 0.05)', padding: '0.2rem 0.5rem', borderRadius: '4px', width: 'fit-content' }}>{lang === 'en' ? 'Category' : 'التصنيف'}</label>
+                  <select 
+                    name="category" 
+                    value={formData.category} 
+                    onChange={handleInputChange}
+                    style={{ padding: '0.85rem', borderRadius: '10px', border: '1px solid var(--color-border)', background: 'var(--color-bg-base)', color: 'white', fontSize: '1.05rem', cursor: 'pointer', appearance: 'auto' }}
+                  >
+                    {['Breakfast', 'Lunch', 'Fast Food', 'Fine Dining', 'Coffee', 'Desserts', 'Gatherings'].map(cat => (
+                      <option key={cat} value={cat} style={{ background: '#1a1a1a', color: 'white', padding: '10px' }}>{t(`cat_${cat.toLowerCase().replace(' ', '_')}`) || cat}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div style={{ padding: '1.25rem', border: '1px solid var(--color-border)', borderRadius: '12px', background: 'rgba(255, 255, 255, 0.03)', marginTop: '0.5rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                  <label style={{ fontSize: '1.05rem', color: 'var(--color-text-primary)', fontWeight: 700 }}>{t('recurring_days_label')}</label>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const allDays = [0, 1, 2, 3, 4, 5, 6];
+                      const isAllSelected = formData.recurringDays.length === 7;
+                      setFormData(prev => ({
+                        ...prev,
+                        recurringDays: isAllSelected ? [] : allDays
+                      }));
+                    }}
+                    style={{
+                      padding: '0.3rem 0.8rem',
+                      borderRadius: '100px',
+                      fontSize: '0.85rem',
+                      background: formData.recurringDays.length === 7 ? 'var(--color-primary)' : 'rgba(255,255,255,0.1)',
+                      color: 'white',
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontWeight: 600
+                    }}
+                  >
+                    {t('select_all')}
+                  </button>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem', marginBottom: '1rem' }}>
+                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, idx) => {
+                    const isSelected = formData.recurringDays.includes(idx);
+                    return (
+                      <button
+                        type="button"
+                        key={day}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setFormData(prev => ({
+                            ...prev,
+                            recurringDays: isSelected ? prev.recurringDays.filter(d => d !== idx) : [...prev.recurringDays, idx]
+                          }));
+                        }}
+                        style={{
+                          flex: 1,
+                          minWidth: '60px',
+                          padding: '0.6rem 0.4rem',
+                          borderRadius: '10px',
+                          border: `2px solid ${isSelected ? 'var(--color-primary)' : 'rgba(255,255,255,0.1)'}`,
+                          background: isSelected ? 'var(--color-primary)' : 'rgba(255,255,255,0.05)',
+                          color: isSelected ? 'white' : 'var(--color-text-secondary)',
+                          fontSize: '0.9rem',
+                          transition: '0.2s',
+                          cursor: 'pointer',
+                          fontWeight: 600
+                        }}
+                      >
+                        {day}
+                      </button>
+                    );
+                  })}
+                </div>
+                
+                {formData.recurringDays.length > 0 && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1rem' }}>
+                    <label style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)' }}>Repeat Until / تكرار حتى (Leave empty for infinite / اتركه فارغاً للتكرار المستمر)</label>
+                    <input 
+                      type="date" 
+                      name="recurringEndDate" 
+                      value={formData.recurringEndDate.split('T')[0] || ''} 
+                      onChange={(e) => setFormData({ ...formData, recurringEndDate: e.target.value ? new Date(e.target.value).toISOString() : '' })} 
+                      min={new Date().toISOString().split('T')[0]}
+                      style={{ padding: '0.5rem', borderRadius: '8px', border: '1px solid var(--color-border)', background: 'var(--color-bg-base)', color: 'white' }} 
+                    />
+                  </div>
+                )}
               </div>
 
               <button 

@@ -45,7 +45,23 @@ const translations = {
     share_with_friend: 'Share with a friend',
     share_social: 'Share on Social Media',
     copy_link: 'Copy Link',
-    link_copied: 'Link copied to clipboard!'
+    link_copied: 'Link copied to clipboard!',
+    // Categories
+    cat_all: 'All',
+    cat_breakfast: 'Breakfast',
+    cat_lunch: 'Lunch',
+    cat_fast_food: 'Fast Food',
+    cat_fine_dining: 'Premium Dining',
+    cat_coffee: 'Coffee & Cafes',
+    cat_desserts: 'Sweets & Desserts',
+    cat_gatherings: 'Gathering Boxes',
+    // Sorting
+    sort_by: 'Sort by:',
+    nearest: 'Nearest to me',
+    most_liked: 'Most Popular',
+    top_rated: 'Top Rated',
+    recurring_days_label: 'Recurring Days (Optional)',
+    select_all: 'Select All'
   },
   ar: {
     dashboard: 'لوحة التحكم',
@@ -89,7 +105,23 @@ const translations = {
     share_with_friend: 'شارك مع صديق',
     share_social: 'مشاركة في وسائل التواصل',
     copy_link: 'نسخ الرابط',
-    link_copied: 'تم نسخ الرابط إلى الحافظة!'
+    link_copied: 'تم نسخ الرابط إلى الحافظة!',
+    // Categories
+    cat_all: 'الكل',
+    cat_breakfast: 'فطور',
+    cat_lunch: 'غداء',
+    cat_fast_food: 'وجبات سريعة',
+    cat_fine_dining: 'مطاعم فاخرة',
+    cat_coffee: 'قهوة وكافيه',
+    cat_desserts: 'حلى وحلويات',
+    cat_gatherings: 'بكجات جمعات',
+    // Sorting
+    sort_by: 'ترتيب حسب:',
+    nearest: 'الأقرب لك',
+    most_liked: 'الأكثر شعبية',
+    top_rated: 'الأعلى تقييماً',
+    recurring_days_label: 'أيام التكرار (اختياري)',
+    select_all: 'تحديد الكل'
   }
 };
 

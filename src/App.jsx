@@ -30,6 +30,8 @@ function App() {
   const { theme, toggleTheme } = useTheme();
   const [offers, setOffers] = useState(mockOffers);
   const [activeTab, setActiveTab] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [sortBy, setSortBy] = useState('Newest');
   const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'map'
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
@@ -56,7 +58,18 @@ function App() {
   };
 
   const now = new Date();
+  const todayDay = now.getDay();
   const unexpiredOffers = offers.filter(offer => {
+    // Check recurring first
+    if (offer.recurringDays && offer.recurringDays.length > 0) {
+      if (offer.recurringEndDate) {
+        const endDate = new Date(offer.recurringEndDate);
+        if (now > endDate) return false;
+      }
+      return offer.recurringDays.includes(todayDay);
+    }
+    
+    // Otherwise check normal expiry
     const expiresAt = new Date(offer.expiryDate);
     return expiresAt >= now;
   });
@@ -65,18 +78,38 @@ function App() {
     ? unexpiredOffers 
     : unexpiredOffers.filter(offer => offer.status === activeTab);
 
+  const categoryFilteredOffers = selectedCategory === 'All'
+    ? baseFilteredOffers
+    : baseFilteredOffers.filter(offer => offer.category === selectedCategory);
+
   const filteredOffers = React.useMemo(() => {
-    // If no user location, just return the filtered offers without sorting by distance
-    if (!userLocation) return baseFilteredOffers;
+    let sortedOffers = [...categoryFilteredOffers];
     
-    // If there is user location but no coordinates on the offer, don't break
-    return baseFilteredOffers.map(offer => {
-      const distance = offer.coordinates 
-        ? calculateDistance(userLocation.lat, userLocation.lng, offer.coordinates.lat, offer.coordinates.lng)
-        : Infinity;
-      return { ...offer, distance };
-    }).sort((a, b) => a.distance - b.distance);
-  }, [baseFilteredOffers, userLocation]);
+    // Calculate distance for all if userLocation exists
+    if (userLocation) {
+       sortedOffers = sortedOffers.map(offer => {
+          const distance = offer.coordinates 
+            ? calculateDistance(userLocation.lat, userLocation.lng, offer.coordinates.lat, offer.coordinates.lng)
+            : Infinity;
+          return { ...offer, distance };
+       });
+    }
+
+    if (sortBy === 'Nearest' && userLocation) {
+      return sortedOffers.sort((a, b) => a.distance - b.distance);
+    } else if (sortBy === 'Most Liked') {
+      return sortedOffers.sort((a, b) => b.likes - a.likes);
+    } else if (sortBy === 'Top Rated') {
+      return sortedOffers.sort((a, b) => {
+         const ratingA = a.likes + a.dislikes > 0 ? a.likes / (a.likes + a.dislikes) : 0;
+         const ratingB = b.likes + b.dislikes > 0 ? b.likes / (b.likes + b.dislikes) : 0;
+         return ratingB - ratingA;
+      });
+    } else {
+      // Newest
+      return sortedOffers;
+    }
+  }, [categoryFilteredOffers, userLocation, sortBy]);
 
   return (
     <div className="app-container">
@@ -157,32 +190,82 @@ function App() {
 
       {/* Main Content Area */}
       <main className="main-content">
-        <header className="dashboard-header" style={{ marginBottom: '1rem' }}>
-          <div>
-            <h2 className="dashboard-title">{t('discover_offers')} <span className="text-gradient">{t('offers_highlight')}</span></h2>
-            <p className="dashboard-subtitle">{t('subtitle')}</p>
+        <header className="dashboard-header" style={{ marginBottom: '1.5rem', flexDirection: 'column', alignItems: 'stretch' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: '1.5rem' }}>
+            <div>
+              <h2 className="dashboard-title">{t('discover_offers')} <span className="text-gradient">{t('offers_highlight') || 'Deals'}</span></h2>
+              <p className="dashboard-subtitle">{t('subtitle')}</p>
+            </div>
+            <div className="flex-center" style={{ gap: '1rem' }}>
+              <div className="glass flex-center" style={{ padding: '0.4rem', borderRadius: '100px', display: 'flex', gap: '0.25rem' }}>
+                <button 
+                  onClick={() => setViewMode('grid')}
+                  style={{ padding: '0.4rem 1rem', borderRadius: '100px', background: viewMode === 'grid' ? 'var(--color-primary)' : 'transparent', color: viewMode === 'grid' ? 'white' : 'var(--color-text-secondary)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', transition: '0.2s' }}
+                >
+                  <Grid size={16} />
+                  <span style={{ fontSize: '0.8rem' }}>Grid</span>
+                </button>
+                <button 
+                  onClick={() => setViewMode('map')}
+                  style={{ padding: '0.4rem 1rem', borderRadius: '100px', background: viewMode === 'map' ? 'var(--color-primary)' : 'transparent', color: viewMode === 'map' ? 'white' : 'var(--color-text-secondary)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', transition: '0.2s' }}
+                >
+                  <MapIcon size={16} />
+                  <span style={{ fontSize: '0.8rem' }}>Map</span>
+                </button>
+              </div>
+              
+              <div className="glass flex-center" style={{ padding: '0.5rem 1.5rem', borderRadius: '100px', gap: '0.5rem', height: 'fit-content' }}>
+                <div className="pulse" style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--color-success)', boxShadow: '0 0 10px var(--color-success)' }}></div>
+                <span style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>{t('agent_online')}</span>
+              </div>
+            </div>
           </div>
-          <div className="flex-center" style={{ gap: '1rem' }}>
-            <div className="glass flex-center" style={{ padding: '0.4rem', borderRadius: '100px', display: 'flex', gap: '0.25rem' }}>
-              <button 
-                onClick={() => setViewMode('grid')}
-                style={{ padding: '0.4rem 1rem', borderRadius: '100px', background: viewMode === 'grid' ? 'var(--color-primary)' : 'transparent', color: viewMode === 'grid' ? 'white' : 'var(--color-text-secondary)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', transition: '0.2s' }}
-              >
-                <Grid size={16} />
-                <span style={{ fontSize: '0.8rem' }}>Grid</span>
-              </button>
-              <button 
-                onClick={() => setViewMode('map')}
-                style={{ padding: '0.4rem 1rem', borderRadius: '100px', background: viewMode === 'map' ? 'var(--color-primary)' : 'transparent', color: viewMode === 'map' ? 'white' : 'var(--color-text-secondary)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', transition: '0.2s' }}
-              >
-                <MapIcon size={16} />
-                <span style={{ fontSize: '0.8rem' }}>Map</span>
-              </button>
+          
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', gap: '1rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', paddingBottom: '0.5rem' }} className="hide-scrollbar">
+              {['All', 'Breakfast', 'Lunch', 'Fast Food', 'Fine Dining', 'Coffee', 'Desserts', 'Gatherings'].map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  style={{
+                    padding: '0.5rem 1rem',
+                    borderRadius: '100px',
+                    whiteSpace: 'nowrap',
+                    fontWeight: 600,
+                    fontSize: '0.85rem',
+                    background: selectedCategory === cat ? 'var(--color-primary)' : 'var(--color-bg-surface)',
+                    color: selectedCategory === cat ? 'white' : 'var(--color-text-secondary)',
+                    border: selectedCategory === cat ? 'none' : '1px solid var(--color-glass-border)',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  {t(`cat_${cat.toLowerCase().replace(' ', '_')}`) || cat}
+                </button>
+              ))}
             </div>
             
-            <div className="glass flex-center" style={{ padding: '0.5rem 1.5rem', borderRadius: '100px', gap: '0.5rem', height: 'fit-content' }}>
-              <div className="pulse" style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--color-success)', boxShadow: '0 0 10px var(--color-success)' }}></div>
-              <span style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>{t('agent_online')}</span>
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              <span style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>{t('sort_by') || 'Sort:'}</span>
+              <select 
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                style={{
+                  padding: '0.5rem 1rem',
+                  borderRadius: '100px',
+                  background: 'var(--color-bg-surface)',
+                  color: 'var(--color-text-primary)',
+                  border: '1px solid var(--color-glass-border)',
+                  fontWeight: 600,
+                  fontSize: '0.85rem',
+                  outline: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                <option value="Newest">{t('newest') || 'Newest'}</option>
+                <option value="Nearest">{t('nearest') || 'Nearest'}</option>
+                <option value="Most Liked">{t('most_liked') || 'Most Liked'}</option>
+                <option value="Top Rated">{t('top_rated') || 'Top Rated'}</option>
+              </select>
             </div>
           </div>
         </header>

@@ -135,13 +135,27 @@ export default function OfferModal({ offer, onClose }) {
           <X size={20} color="var(--color-text-primary)" />
         </button>
 
-        <div style={{ height: '300px', width: '100%', flexShrink: 0, position: 'relative' }}>
+        <div style={{ height: '300px', width: '100%', flexShrink: 0, position: 'relative', overflow: 'hidden', backgroundColor: 'var(--color-bg-base)' }}>
           {images.length > 0 && (
-            <img 
-              src={images[currentImageIndex]} 
-              alt={offer[nameField] || 'Offer Image'} 
-              style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 0.5s ease-in-out' }}
-            />
+            <>
+              <div 
+                style={{
+                  position: 'absolute',
+                  inset: -20,
+                  backgroundImage: `url(${images[currentImageIndex]})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  filter: 'blur(15px)',
+                  opacity: 0.5,
+                  zIndex: 0
+                }}
+              />
+              <img 
+                src={images[currentImageIndex]} 
+                alt={offer[nameField] || 'Offer Image'} 
+                style={{ width: '100%', height: '100%', objectFit: 'contain', position: 'relative', zIndex: 1, transition: 'opacity 0.5s ease-in-out' }}
+              />
+            </>
           )}
           
           {/* Navigation Arrows */}

@@ -14,6 +14,8 @@ export const mockOffers = [
     coordinates: { lat: 21.5433, lng: 39.1728 }, // Jeddah
     workingHours: "10:00 AM - 11:00 PM",
     expiryDate: "2026-04-20T23:59:59Z",
+    recurringDays: [1, 3], // Monday, Wednesday
+    recurringEndDate: null, // Infinite
     category: "Fast Food",
     status: "Ending Soon",
     likes: 124,
@@ -58,7 +60,9 @@ export const mockOffers = [
     coordinates: { lat: 21.4933, lng: 39.1828 }, // Jeddah
     workingHours: "6:30 AM - 4:00 PM",
     expiryDate: "2026-04-18T23:59:59Z",
-    category: "Breakfast",
+    recurringDays: [0, 1, 2, 3, 4], // Weekdays
+    recurringEndDate: "2026-12-31T23:59:59Z", // Ends year end
+    category: "Coffee",
     status: "Nearby",
     likes: 42,
     dislikes: 1,
@@ -80,7 +84,9 @@ export const mockOffers = [
     coordinates: { lat: 21.5733, lng: 39.1328 }, // Jeddah
     workingHours: "11:00 AM - 10:00 PM",
     expiryDate: "2026-04-24T23:59:59Z",
-    category: "Fast Food",
+    recurringDays: [2], // Tuesday
+    recurringEndDate: null,
+    category: "Lunch",
     status: "Newest",
     likes: 210,
     dislikes: 8,
@@ -102,7 +108,7 @@ export const mockOffers = [
     coordinates: { lat: 21.5633, lng: 39.1558 }, // Jeddah
     workingHours: "5:00 PM - 11:30 PM",
     expiryDate: "2026-04-17T23:59:59Z",
-    category: "Fine Dining",
+    category: "Gatherings",
     status: "Ending Soon",
     likes: 56,
     dislikes: 12,
@@ -111,24 +117,26 @@ export const mockOffers = [
   },
   {
     id: "off-006",
-    restaurantName_en: "The Vegan Spot",
-    restaurantName_ar: "الوجهة النباتية",
+    restaurantName_en: "The Sweet Spot",
+    restaurantName_ar: "الوجهة الحلوة",
     imageUrls: [
-      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1551024506-0cb9a1ca2446?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1549488344-c6a6552504fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1551024601-bec78aea704b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     ],
-    description_en: "20% off all salads and smoothie bowls this weekend.",
-    description_ar: "خصم 20% على جميع السلطات وأوعية السموذي نهاية هذا الأسبوع.",
+    description_en: "20% off all cakes and desserts on weekends.",
+    description_ar: "خصم 20% على جميع الكعك والحلويات في عطلة نهاية الأسبوع.",
     city: "Jeddah",
     coordinates: { lat: 21.5233, lng: 39.1428 }, // Jeddah
-    workingHours: "8:00 AM - 8:00 PM",
+    workingHours: "8:00 AM - 11:00 PM",
     expiryDate: "2026-03-30T23:59:59Z",
-    category: "Breakfast",
+    recurringDays: [5, 6], // Fri, Sat
+    recurringEndDate: null,
+    category: "Desserts",
     status: "Nearby",
-    likes: 38,
+    likes: 380,
     dislikes: 0,
     reports: 2,
-    views: 280
+    views: 2800
   }
 ];
