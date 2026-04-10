@@ -10,6 +10,8 @@ import OffersMap from './components/OffersMap';
 import ThemeSwitch from './components/ThemeSwitch';
 import { useLanguage } from './context/LanguageContext';
 import { useTheme } from './context/ThemeContext';
+import { db } from './firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 // Haversine formula to calculate distance between two coordinates in kilometers
 function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -35,8 +37,6 @@ function App() {
   const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'map'
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
-  const [userLocation, setUserLocation] = useState(null);
-
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -51,6 +51,23 @@ function App() {
         }
       );
     }
+
+    const fetchOffers = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "offers"));
+        const fbOffers = [];
+        querySnapshot.forEach((doc) => {
+          fbOffers.push({ id: doc.id, ...doc.data() });
+        });
+        if (fbOffers.length > 0) {
+          setOffers(fbOffers);
+        }
+      } catch (err) {
+        console.warn("Firebase fetching error (fallback to mock):", err);
+      }
+    };
+
+    fetchOffers();
   }, []);
 
   const handleAddOffer = (newOffer) => {

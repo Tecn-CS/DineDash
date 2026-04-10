@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Upload, X, CheckCircle, Loader2, FileImage, Image as ImageIcon } from 'lucide-react';
-
+import { db } from '../firebase';
+import { collection, addDoc } from 'firebase/firestore';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function AdminUpload({ onClose, onOfferAdded }) {
@@ -45,10 +46,7 @@ export default function AdminUpload({ onClose, onOfferAdded }) {
       currentStep++;
       if (currentStep >= workflowSteps.length) {
         clearInterval(interval);
-        setTimeout(() => {
-          setStep(2);
-          
-          // Add to state via callback 
+        setTimeout(async () => {
           const newOffer = {
             id: `off-${Date.now()}`,
             restaurantName_en: formData.restaurantName_en,
@@ -64,13 +62,23 @@ export default function AdminUpload({ onClose, onOfferAdded }) {
             status: 'Newest',
             googleMapsLink: formData.googleMapsLink,
             city: formData.city,
-            // Fallback mock coordinates since we don't have a real geocoder attached yet
             coordinates: {
               lat: 21.5433 + (Math.random() - 0.5) * 0.05, 
               lng: 39.1728 + (Math.random() - 0.5) * 0.05
-            }
+            },
+            reports: 0,
+            likes: 0,
+            dislikes: 0,
+            views: 0
           };
           
+          try {
+             await addDoc(collection(db, "offers"), newOffer);
+          } catch(e) {
+             console.error("Firebase config missing or write failed, falling back to local state.", e);
+          }
+
+          setStep(2);
           if (onOfferAdded) {
             onOfferAdded(newOffer);
           }

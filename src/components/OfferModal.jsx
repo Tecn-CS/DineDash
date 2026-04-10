@@ -232,7 +232,13 @@ export default function OfferModal({ offer, onClose }) {
               </div>
             </div>
             {(offer.city || offer.distance !== undefined) && (
-              <div className="flex-center" style={{ background: 'var(--color-bg-surface)', padding: '1rem', borderRadius: 'var(--border-radius-sm)', justifyContent: 'flex-start', gap: '1rem' }}>
+              <a 
+                href={offer.googleMapsLink || (offer.coordinates ? `https://www.google.com/maps/search/?api=1&query=${offer.coordinates.lat},${offer.coordinates.lng}` : '#')}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-center" 
+                style={{ background: 'var(--color-bg-surface)', padding: '1rem', borderRadius: 'var(--border-radius-sm)', justifyContent: 'flex-start', gap: '1rem', textDecoration: 'none', color: 'inherit' }}
+              >
                 <MapPin color="var(--color-primary)" />
                 <div>
                   <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{lang === 'ar' ? 'الموقع' : 'Location'}</p>
@@ -241,7 +247,7 @@ export default function OfferModal({ offer, onClose }) {
                     {offer.distance !== undefined && <span style={{ color: 'var(--color-primary)' }}>({offer.distance.toFixed(1)} {lang === 'ar' ? 'كم' : 'km'})</span>}
                   </p>
                 </div>
-              </div>
+              </a>
             )}
           </div>
 
