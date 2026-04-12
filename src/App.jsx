@@ -37,6 +37,8 @@ function App() {
   const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'map'
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
+  
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
